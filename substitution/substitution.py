@@ -8,7 +8,7 @@ alphabet
 
 Creates a random initial key
 
-Then, usesa hill climbing algorithm to work out the final key. ---> Changes 2
+Then, uses a hill climbing algorithm to work out the final key. ---> Changes 2
 letters in the key per iteration and scores it with quagram analysis, if it is
 better than the previous, it is replaced.
 

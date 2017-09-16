@@ -2,11 +2,11 @@
 
   * [x] Chi-squared Statistic (text\ characterisation/chiSquared.py)
   * [x] Index of Coincidence (text\ characterisation/ioc.py)
-  * [ ] Bigram
+  * [x] Bigram
   * [ ] Trigram
   * [x] Quadgram (text\ characterisation/quagdrams.py)
   * [ ] Ngrams (ngrams.py)
-  
+
 
 # Cipher Class Auto-Detection
   * [ ] Monoalphabetic substitution cipher
@@ -16,7 +16,7 @@
 
 # Cracking
   * [ ] Auto
-  * [ ] Caesar Cipher
+  * [x] Caesar Cipher
   * [x] Affine Cipher (affine)
   * [ ] Rail-fence Cipher
   * [ ] Baconian Cipher

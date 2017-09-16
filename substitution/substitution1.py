@@ -1,6 +1,9 @@
 """
 TEAMBOMBA 2017 - Proprietary Program
 Simple monoalphabetic substitution cracker v2 - Simulated annealing approach
+
+CURRENTLY NOT WORKING
+
 """
 """
 Key is dictionary which maps each letter in the alphabet to another letter in the
@@ -11,41 +14,41 @@ Look at wikipedia for info:
 https://en.wikipedia.org/wiki/Simulated_annealing
 """
 
-ciphertext = "SOWFBRKAWFCZFSBSCSBQITBKOWLBFXTBKOWLSOXSOXFZWWIBICFWUQLRXINOCIJLWJFQUNWXLFBSZXFBTXAANTQIFBFSFQUFCZFSBSCSBIMWHWLNKAXBISWGSTOXLXTSWLUQLXJBUUWLWISTBKOWLSWGSTOXLXTSWLBSJBUUWLFULQRTXWFXLTBKOWLBISOXSSOWTBKOWLXAKOXZWSBFIQSFBRKANSOWXAKOXZWSFOBUSWJBSBFTQRKAWSWANECRZAWJ".upper().replace(" ", "").replace("\n", "")
+ciphertext = "SOWFBRKAWFCZFSBSCSBQITBKOWLBFXTBKOWLSOXSOXFZWWIBICFWUQLRXINOCIJLWJFQUNWXLFBSZXFBTXAANTQIFBFSFQUFCZFSBSCSBIMWHWLNKAXBISWGSTOXLXTSWLUQLXJBUUWLWISTBKOWLSWGSTOXLXTSWLBSJBUUWLFULQRTXWFXLTBKOWLBISOXSSOWTBKOWLXAKOXZWSBFIQSFBRKANSOWXAKOXZWSFOBUSWJBSBFTQRKAWSWANECRZAWJ".upper().replace(" ", "").replace("\n", "")[:40]
 #No punctuation pls
 
 """
 Define and create quadgram fitness object for scoring text
 """
 from math import log10
-class quadgram_score(object):
+
+class bigram_score(object):
     def __init__(self,ngramfile):
-        self.quadgrams = {}
+        self.bigrams = {}
         with open(ngramfile) as f:
             content = f.readlines()
 
         for line in content:
             key,count = line.split(" ")
-            self.quadgrams[key] = int(count)
+            self.bigrams[key] = int(count)
 
-        self.N = sum(int(count) for key,count in self.quadgrams.items())
+        self.N = sum(int(count) for key,count in self.bigrams.items())
 
     def score(self,text):
-        text = text.upper()
-        text_quadgrams = []
-        for index in range(0, len(text)-3):
-            text_quadgrams.append(text[index:index+4])
+        text_bigrams = []
+        for index in range(0, len(text)-1):
+            text_bigrams.append(text[index:index+2])
 
-        quadgrams = self.quadgrams.__getitem__
+        bigrams = self.bigrams.__getitem__
         fitness = 0
-        for quadgram in text_quadgrams:
-            if quadgram in self.quadgrams:
-                fitness += log10(self.quadgrams[quadgram]/self.N)
+        for bigram in text_bigrams:
+            if bigram in self.bigrams:
+                fitness += log10(self.bigrams[bigram]/self.N)
             else:
                 fitness += log10(0.01/self.N)
         return fitness
 
-fitness = quadgram_score("quadgrams")
+fitness = bigram_score("bigrams")
 
 """
 Define decrypt function (decrypts whole ciphertext given key)
@@ -92,24 +95,36 @@ best_score = fitness.score(decrypt(ciphertext, best_key))
 max_key = list(best_key)
 max_score = fitness.score(decrypt(ciphertext, max_key))
 
-T = 20
-while T > 0:
-    for count in range(5000):
-        key = list(best_key)
-        key[1] = swap_letters(key[1])
-        score = fitness.score(decrypt(ciphertext, key))
-        fitness_diff = score - best_score
-        if fitness_diff > 0:
-            best_key = list(key)
-            best_score = score
-        elif exp(fitness_diff/T) > randint(0,1):
-            best_key = list(key)
-            best_score = score
-    if best_score > max_score:
-        max_key = list(best_key)
-        max_score = best_score
-        print(max_key, max_score)
-    T -= 0.2
+for n in range(1,6):
+    print("Epoch", str(n) + ":", max_key, max_score)
+    print(decrypt(ciphertext, max_key).lower())
+
+    initial_key = ["ABCDEFGHIJKLMNOPQRSTUVWXYZ", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"]
+    initial_key[1] = list(initial_key[1])
+    random.shuffle(initial_key[1])
+    initial_key[1] = "".join(initial_key[1])
+
+    best_key = list(initial_key)
+    best_score = fitness.score(decrypt(ciphertext, best_key))
+
+    T = 30
+    while T > 0:
+        for count in range(5000):
+            key = list(best_key)
+            key[1] = swap_letters(key[1])
+            score = fitness.score(decrypt(ciphertext, key))
+            fitness_diff = score - best_score
+            if fitness_diff > 0:
+                best_key = list(key)
+                best_score = score
+            elif exp(fitness_diff/T) > randint(0,1):
+                best_key = list(key)
+                best_score = score
+        if best_score > max_score:
+            max_key = list(best_key)
+            max_score = best_score
+            print(max_key, max_score)
+        T -= 0.1
 
 
 print("Key:", max_key[0].lower())
