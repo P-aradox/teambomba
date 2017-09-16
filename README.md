@@ -1,5 +1,5 @@
 Analysis
-[x] Chi-squared Statistic (text\ characterisation/chiSquared.py)
+  [x] Chi-squared Statistic (text\ characterisation/chiSquared.py)
   [x] Index of Coincidence (text\ characterisation/ioc.py)
   [ ] Bigram
   [ ] Trigram
