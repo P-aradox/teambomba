@@ -16,14 +16,14 @@
 
 # Cracking
   * [ ] Auto
-  * [x] Caesar Cipher
+  * [x] ~~Caesar Cipher~~
   * [x] Affine Cipher (affine)
   * [ ] Rail-fence Cipher
   * [ ] Baconian Cipher
   * [ ] Polybius Square Cipher
   * [x] Simple Substitution Cipher (Need to improve with simulated annealing algorithm)
   * [ ] Columnar Transposition Cipher
-  * [x] Vigenère Cipher
+  * [x] ~~Vigenère Cipher~~
   * [ ] Hill Cipher
   * [ ] Playfair Cipher
   * [ ] Bifid Cipher
